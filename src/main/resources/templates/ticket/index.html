@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/header :: head}"></div>
+    <title>Ticket-Platform - Home</title>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/navbar :: nav}"></div>
+
+    <main class="container mb-5">
+
+        <div class="text-center my-5">
+            <h1>Ticket disponibili:</h1>
+        </div>
+
+        <div th:if="${list.isEmpty()}" class="text-center mb-5">
+            <p>Nessun ticket da visualizzare!</p>
+        </div>
+
+        <div th:unless="${list.isEmpty()}">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Titolo</th>
+                        <th scope="col">Testo</th>
+                        <th scope="col">Data di Creazione</th>
+                        <th scope="col">Stato</th>
+                        <th scope="col"> <!--Spazio per il dettaglio--> </th>
+                        <th scope="col"> <!--Spazio per aggiunta note--> </th>
+                        <th scope="col"> <!--Spazio per eliminare ticket--> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${list}">
+                        <td th:text="${ticket.title}"></td>
+                        <td th:text="${ticket.body}"></td>
+                        <td th:text="${ticket.dateOfCreation}"></td>
+                        <td th:text="${ticket.state}"></td>
+                        <td>
+                            <!-- AGGIUNGERE BOTTONE PER ANDARE AL DETTAGLIO DEL LIBRO -->
+                        </td>
+                        <td>
+                            <!-- AGGIUNGERE BOTTONE PER ANDARE AD AGGIUNGERE UNA NOTA -->
+                        </td>
+                        <td>
+                            <!-- AGGIUNGERE BOTTONE PER ELIMINARE IL TICKET -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/header :: bootstrapScript}"
+</body>
+</html>
