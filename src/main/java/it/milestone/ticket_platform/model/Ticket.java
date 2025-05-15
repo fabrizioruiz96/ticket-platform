@@ -1,6 +1,8 @@
 package it.milestone.ticket_platform.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +11,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -21,30 +22,20 @@ public class Ticket {
     private Integer id;
 
     @Column(length=150)
-    @Size(min=10, max=150, message="Max 150 caratteri")
+    @Size(min=10, max=150, message="Il testo deve avere tra i 10 e i 150 caratteri")
     @NotBlank(message="Il campo non può essere vuoto")
     private String title;
 
-    @Column(updatable=false)
-    private LocalDateTime dateOfCreation;
+    @CreationTimestamp
+    private LocalDate dateOfCreation;
 
     @Column(length=3000)
-    @Size(min=30, max=3000, message="Max 3000 caratteri")
+    @Size(min=30, max=3000, message="Il testo deve avere tra i 30 e i 3000 caratteri")
     @NotBlank(message="Il campo non può essere vuoto")
     private String body;
 
     @Enumerated(EnumType.STRING)
-    private TicketState state;
-
-    @PrePersist
-    private void onCreation() {
-        if (dateOfCreation == null) {
-            dateOfCreation = LocalDateTime.now();
-        }
-        if (state == null) {
-            state = state.DA_FARE;
-        }
-    }
+    private TicketState state = TicketState.DA_FARE;
 
     public Integer getId() {
         return id;
@@ -54,11 +45,11 @@ public class Ticket {
         this.id = id;
     }
 
-    public LocalDateTime getDateOfCreation() {
+    public LocalDate getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public void setDateOfCreation(LocalDateTime dateOfCreation) {
+    public void setDateOfCreation(LocalDate dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
 

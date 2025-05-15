@@ -9,5 +9,4 @@ import it.milestone.ticket_platform.model.Ticket;
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     public List<Ticket> findByTitleContainingIgnoreCase (String title);
-    
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/header :: head}"></div>
+    <title>Ticket Platform - Nuovo Ticket</title>
+</head>
+
+<body>
+    
+    <div th:replace="~{fragments/navbar :: nav}"></div>
+
+    <main class="container mb-5">
+
+        <div class="text-center my-5">
+            <h1 th:if="${!editMode}">Crea un nuovo ticket</h1>
+            <h1 th:if="${editMode}">Modifica ticket</h1>
+            <hr>
+        </div>
+
+        <form id="ticket-form" th:object="${ticket}" th:action="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}" method="post">
+
+            <div class="row">
+
+                <div class="col-6">
+
+                    <div class="mb-3">
+                        <label for="inputTitle" class="form-label">Inserisci il titolo</label>
+                        <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:errorClass="is-invalid">
+                        
+                        <div class="text-start">
+                            <ul th:if="${#fields.hasErrors('title')}">
+                                <li th:each="error : ${#fields.errors('title')}" class="text-danger" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputBody" class="form-label">Inserisci il testo</label>
+                        <input type="text" class="form-control" id="inputBody" th:field="*{body}" th:errorClass="is-invalid">
+                        
+                        <div class="text-start">
+                            <ul th:if="${#fields.hasErrors('body')}">
+                                <li th:each="error : ${#fields.errors('body')}" class="text-danger" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BOTTONI -->
+                     <div class="d-flex justify-content-around align-items-center">
+                        <div>
+                            <a th:href="@{/ticket}" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Indietro</a>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg">Salva</button>
+                        <div>
+                            <a th:href="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}" class="btn">Cancella <i class="bi bi-trash"></i></a>
+                        </div>
+                     </div>
+
+                </div>
+
+            </div>
+
+        </form>
+    </main>
+
+    <div th:replace="~{fragments/header :: bootstrapScript}"></div>
+</body>
+
+</html>

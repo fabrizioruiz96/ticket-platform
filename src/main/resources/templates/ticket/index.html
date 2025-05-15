@@ -3,16 +3,34 @@
 
 <head>
     <div th:replace="~{fragments/header :: head}"></div>
-    <title>Ticket-Platform - Home</title>
+    <title>Ticket Platform - Home</title>
 </head>
 
 <body>
 
     <div th:replace="~{fragments/navbar :: nav}"></div>
 
+    <div th:if="${successMessage != null}" class="text-center d-flex justify-content-center mt-2">
+        <div class="alert alert-success alert-dismissible fade show w-25" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
     <main class="container mb-5">
 
-        <div class="text-center my-5">
+        <div class="my-3 d-flex justify-content-between">
+            <form th:action="@{/ticket}" method="get">
+                <div class="input-group">
+                    <input type="search" name="keyword" th:value="${keyword}" class="form-control border border-black" placeholder="Inserisci il titolo" aria-label="Inserisci il titolo">
+                    <button class="btn btn-warning border border-black" type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+
+            <a class="btn btn-warning border border-black" th:href="@{/ticket/create}">Crea un nuovo ticket</a>
+        </div>
+
+        <div class="text-center mb-5">
             <h1>Ticket disponibili:</h1>
         </div>
 
@@ -21,7 +39,7 @@
         </div>
 
         <div th:unless="${list.isEmpty()}">
-            <table class="table">
+            <table class="table table-success table-striped table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Titolo</th>
@@ -35,8 +53,8 @@
                 </thead>
                 <tbody>
                     <tr th:each="ticket : ${list}">
-                        <td th:text="${ticket.title}"></td>
-                        <td th:text="${ticket.body}"></td>
+                        <th scope="row" th:text="${ticket.title}"></td>
+                        <td th:text="${#strings.abbreviate(ticket.body, 100)}"></td>
                         <td th:text="${ticket.dateOfCreation}"></td>
                         <td th:text="${ticket.state}"></td>
                         <td>
@@ -47,6 +65,9 @@
                         </td>
                         <td>
                             <!-- AGGIUNGERE BOTTONE PER ELIMINARE IL TICKET -->
+                             <form th:action="@{|/ticket/delete/${ticket.id}|}" method="post">
+                                <button class="btn btn-sm btn-danger" type="submit" id="submitButton" onclick="return confirm('Sicuro di voler eliminare questo ticket?')"><i class="bi bi-trash"></i></button>
+                             </form>
                         </td>
                     </tr>
                 </tbody>
