@@ -66,6 +66,7 @@
                         <th scope="col">Categoria</th>
                         <th scope="col">Stato</th>
                         <th scope="col"> <!--Spazio per il dettaglio--> </th>
+                        <th scope="col"> <!-- Spazio per la modifica --> </th>
                         <th scope="col"> <!--Spazio per eliminare ticket--> </th>
                     </tr>
                 </thead>
@@ -77,8 +78,12 @@
                         <td th:text="${ticket.category.name}"></td>
                         <td th:text="${ticket.state}"></td>
                         <td>
-                            <!-- AGGIUNGERE BOTTONE PER ANDARE AL DETTAGLIO DEL LIBRO -->
-                             <a th:href="@{|/ticket/show/${ticket.id}|}" class="btn btn-sm btn-warning"><i class="bi bi-card-list"></i></a>
+                            <!-- AGGIUNGERE BOTTONE PER ANDARE AL DETTAGLIO DEL TICKET -->
+                            <a th:href="@{|/ticket/show/${ticket.id}|}" class="btn btn-sm btn-warning"><i class="bi bi-card-list"></i></a>
+                        </td>
+                        <td>
+                            <!-- AGGIUNGERE BOTTONE PER MODIFICARE IL TICKET -->
+                            <a th:href="@{|/ticket/edit/${ticket.id}|}" class="btn btn-sm btn-success"><i class="bi bi-pencil"></i></a>
                         </td>
                         <td>
                             <!-- AGGIUNGERE BOTTONE PER ELIMINARE IL TICKET -->
