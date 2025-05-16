@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.milestone.ticket_platform.model.Ticket;
+import it.milestone.ticket_platform.model.TicketState;
+import it.milestone.ticket_platform.repository.CategoryRepository;
 import it.milestone.ticket_platform.service.TicketService;
 import jakarta.validation.Valid;
-
 
 @Controller
 @RequestMapping("/ticket")
@@ -26,23 +27,27 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
+    @Autowired
+    private CategoryRepository catRepo;
 
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("ticket", new Ticket());
+        model.addAttribute("catList", catRepo.findAll());
         model.addAttribute("editMode", false);
         return "/ticket/edit";
     }
 
     @PostMapping("/create")
     public String store(
-        @Valid @ModelAttribute("ticket") Ticket formTicket,
-        BindingResult bindingResult,
-        Model model,
-        RedirectAttributes redirectAttributes) {
+            @Valid @ModelAttribute("ticket") Ticket formTicket,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("editMode", false);
+            model.addAttribute("catList", catRepo.findAll());
             return "/ticket/edit";
         }
 
@@ -53,45 +58,62 @@ public class TicketController {
     }
 
     @GetMapping
-    public String index(@RequestParam(name="keyword", required=false) String title, Model model) {
-        
-        model.addAttribute("list", ticketService.findTicket(title));
+    public String index(
+            @RequestParam(name="title", required = false) String title,
+            @RequestParam(name="category", required = false) Integer cat,
+            @RequestParam(name="state", required = false) TicketState state,
+            Model model) {
 
+        model.addAttribute("ticketList", ticketService.findTicket(title, cat, state));
+        model.addAttribute("catList", catRepo.findAll());
+        model.addAttribute("stateList", TicketState.values());
+        
         return "ticket/index";
     }
 
     @GetMapping("/show/{id}")
     public String show(@PathVariable("id") Integer id, Model model) {
 
-        Optional<Ticket> optTicket = ticketService.findById(id);  
-        
-        if(!optTicket.isPresent()) {
+        Optional<Ticket> optTicket = ticketService.findById(id);
+
+        if (!optTicket.isPresent()) {
             model.addAttribute("errorMessage", "Errore di ricerca del ticket");
             model.addAttribute("errorCause", "L'id inserito non è valido");
             return "/error_pages/generalError";
         }
 
         model.addAttribute("ticket", optTicket.get());
+        model.addAttribute("stateList", TicketState.values());
 
         return "/ticket/show";
     }
-    
+
+    @PostMapping("/updateState")
+    public String updateState(@RequestParam("id") Integer id, TicketState state) {
+        Ticket ticket = ticketService.findById(id).get();
+        ticket.setState(state);
+        ticketService.save(ticket);
+        return "redirect:/ticket/show/" + id;
+    }
+
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("ticket", ticketService.findById(id).get());
+        model.addAttribute("catList", catRepo.findAll());
         model.addAttribute("editMode", true);
         return "/ticket/edit";
     }
 
     @PostMapping("/edit/{id}")
     public String update(
-        @Valid @ModelAttribute("ticket") Ticket formTicket,
-        BindingResult bindingResult,
-        RedirectAttributes redirectAttributes,
-        Model model) {
+            @Valid @ModelAttribute("ticket") Ticket formTicket,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("ticket", formTicket);
+            model.addAttribute("catList", catRepo.findAll());
             model.addAttribute("editMode", true);
             return "/ticket/edit";
         }
@@ -106,5 +128,6 @@ public class TicketController {
     public String delete(@PathVariable("id") Integer id) {
         ticketService.delete(id);
         return "redirect:/ticket";
-    }    
+    }
+
 }

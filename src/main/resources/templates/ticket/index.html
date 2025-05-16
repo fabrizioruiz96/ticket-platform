@@ -10,6 +10,7 @@
 
     <div th:replace="~{fragments/navbar :: nav}"></div>
 
+    <!-- MESSAGGIO PER LA CORRETTA CREAZIONE E MODIFICA DI UN TICKET -->
     <div th:if="${successMessage != null}" class="text-center d-flex justify-content-center mt-2">
         <div class="alert alert-success alert-dismissible fade show w-25" role="alert">
             <span th:text="${successMessage}"></span>
@@ -19,54 +20,70 @@
 
     <main class="container mb-5">
 
-        <div class="my-3 d-flex justify-content-between">
-            <form th:action="@{/ticket}" method="get">
-                <div class="input-group">
-                    <input type="search" name="keyword" th:value="${keyword}" class="form-control border border-black" placeholder="Inserisci il titolo" aria-label="Inserisci il titolo">
-                    <button class="btn btn-warning border border-black" type="submit"><i class="bi bi-search"></i></button>
-                </div>
-            </form>
-
+        <!-- SEZIONE PER FILTRAGGIO E RICERCA DI UN TICKET -->
+        <div class="my-3">
             <a class="btn btn-warning border border-black" th:href="@{/ticket/create}">Crea un nuovo ticket</a>
         </div>
 
-        <div class="text-center mb-5">
+        <div class="text-center mb-3">
             <h1>Ticket disponibili:</h1>
         </div>
+        
+        <div class="mb-3">
+            <form th:action="@{/ticket}" method="get">
+                <div class="d-inline-block">
+                    <input type="search" name="title" th:value="${keyword}" class="form-control border border-black" placeholder="Inserisci il titolo" aria-label="Inserisci il titolo">
+                </div>
+                <div class="d-inline-block">
+                    <select name="category" id="form-select">
+                        <option value="" selected>Tutte le categorie</option>                        
+                        <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>                       
+                    </select>
+                </div>
+                <div class="d-inline-block">
+                    <select name="state" id="form-select">
+                        <option value="" selected>Qualsiasi stato</option>
+                        <option th:each="state : ${stateList}" th:value="${state}" th:text="${state}"></option>
+                    </select>
+                </div>
+                <div class="d-inline-block">
+                    <button class="btn btn-warning border border-black" type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+        </div>
 
-        <div th:if="${list.isEmpty()}" class="text-center mb-5">
+        <div th:if="${ticketList.isEmpty()}" class="text-center mb-5">
             <p>Nessun ticket da visualizzare!</p>
         </div>
 
-        <div th:unless="${list.isEmpty()}">
+        <div th:unless="${ticketList.isEmpty()}">
             <table class="table table-success table-striped table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Titolo</th>
                         <th scope="col">Testo</th>
                         <th scope="col">Data di Creazione</th>
+                        <th scope="col">Categoria</th>
                         <th scope="col">Stato</th>
                         <th scope="col"> <!--Spazio per il dettaglio--> </th>
-                        <th scope="col"> <!--Spazio per aggiunta note--> </th>
                         <th scope="col"> <!--Spazio per eliminare ticket--> </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="ticket : ${list}">
+                    <tr th:each="ticket : ${ticketList}">
                         <th scope="row" th:text="${ticket.title}"></td>
                         <td th:text="${#strings.abbreviate(ticket.body, 100)}"></td>
                         <td th:text="${ticket.dateOfCreation}"></td>
+                        <td th:text="${ticket.category.name}"></td>
                         <td th:text="${ticket.state}"></td>
                         <td>
                             <!-- AGGIUNGERE BOTTONE PER ANDARE AL DETTAGLIO DEL LIBRO -->
-                        </td>
-                        <td>
-                            <!-- AGGIUNGERE BOTTONE PER ANDARE AD AGGIUNGERE UNA NOTA -->
+                             <a th:href="@{|/ticket/show/${ticket.id}|}" class="btn btn-sm btn-warning"><i class="bi bi-card-list"></i></a>
                         </td>
                         <td>
                             <!-- AGGIUNGERE BOTTONE PER ELIMINARE IL TICKET -->
                              <form th:action="@{|/ticket/delete/${ticket.id}|}" method="post">
-                                <button class="btn btn-sm btn-danger" type="submit" id="submitButton" onclick="return confirm('Sicuro di voler eliminare questo ticket?')"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-danger" type="submit" id="submitButton" onclick="return confirm('Sicuro di voler eliminare questo ticket?')"><i class="bi bi-trash-fill"></i></button>
                              </form>
                         </td>
                     </tr>
@@ -75,6 +92,6 @@
         </div>
     </main>
 
-    <div th:replace="~{fragments/header :: bootstrapScript}"
+    <div th:replace="~{fragments/header :: bootstrapScript}"></div>
 </body>
 </html>

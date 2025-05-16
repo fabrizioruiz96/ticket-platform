@@ -46,6 +46,20 @@
                         </div>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="inputCategory" class="form-label">Selezione una categoria</label>
+                        <select name="category" id="inputCategory" class="form-select">
+                            <option value="" selected disabled>Seleziona una categoria</option>
+                            <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+
+                        <div class="text-start">
+                            <ul th:if="${#fields.hasErrors('category')}">
+                                <li th:each="error : ${#fields.errors('category')}" class="text-danger" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <!-- BOTTONI -->
                      <div class="d-flex justify-content-around align-items-center">
                         <div>

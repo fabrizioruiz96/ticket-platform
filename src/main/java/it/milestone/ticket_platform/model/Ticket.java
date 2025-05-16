@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,7 +13,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -36,6 +41,20 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     private TicketState state = TicketState.DA_FARE;
+
+    @ManyToOne
+    @JoinColumn(name="category_id", nullable=false)
+    @JsonBackReference
+    @NotNull(message="Seleziona una categoria")
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public Integer getId() {
         return id;

@@ -19,7 +19,20 @@
 
         <div class="shadow-sm p-3 bg-body-tertiary rounded d-inline-block">
             <p th:text="${ticket.body}"></p>
+            <p th:text="${ticket.category.name}"></p>
         </div>
+
+        <form id="ticket-form" th:action="@{/ticket/updateState}" method="post">
+            <input type="hidden" name="id" th:value="${ticket.id}"/>
+
+            <label for="changeState" class="form-label">Cambia lo stato di lavorazione del ticket</label>
+
+            <select name="state" id="changeState" class="form-select">
+                <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}" th:selected="${ticket.state == state}"></option>
+            </select>
+            
+            <button type="submit">Cambia stato</button>
+        </form>
     </main>
 
     <div th:replace="~{fragments/header :: bootstrapScript}"></div>
