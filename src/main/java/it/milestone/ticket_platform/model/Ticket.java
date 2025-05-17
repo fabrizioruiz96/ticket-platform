@@ -1,6 +1,7 @@
 package it.milestone.ticket_platform.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -43,10 +45,21 @@ public class Ticket {
     private TicketState state = TicketState.DA_FARE;
 
     @ManyToOne
-    @JoinColumn(name="category_id", nullable=false)
     @JsonBackReference
+    @JoinColumn(name="category_id", nullable=false)
     @NotNull(message="Seleziona una categoria")
     private Category category;
+
+    @OneToMany(mappedBy="ticket")
+    private List<Note> notes;
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
 
     public Category getCategory() {
         return category;

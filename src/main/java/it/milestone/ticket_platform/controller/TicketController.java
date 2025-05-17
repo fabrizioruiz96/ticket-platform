@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import it.milestone.ticket_platform.model.Note;
 import it.milestone.ticket_platform.model.Ticket;
 import it.milestone.ticket_platform.model.TicketState;
 import it.milestone.ticket_platform.repository.CategoryRepository;
@@ -84,6 +85,7 @@ public class TicketController {
 
         model.addAttribute("ticket", optTicket.get());
         model.addAttribute("stateList", TicketState.values());
+        model.addAttribute("noteList", optTicket.get().getNotes());
 
         return "/ticket/show";
     }
@@ -130,4 +132,14 @@ public class TicketController {
         return "redirect:/ticket";
     }
 
+    @GetMapping("/{id}/note")
+    public String note(@PathVariable("id") Integer id, Model model) {
+        Ticket ticket = ticketService.findById(id).get();
+        Note note = new Note(ticket);
+
+        model.addAttribute("note", note);
+        model.addAttribute("editMode", false);
+
+        return "/note/edit";
+    }
 }
