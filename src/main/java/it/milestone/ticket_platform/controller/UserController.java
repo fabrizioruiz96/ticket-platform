@@ -5,8 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import it.milestone.ticket_platform.model.User;
 import it.milestone.ticket_platform.model.UserState;
 import it.milestone.ticket_platform.security.DatabaseUserDetailsService;
 
@@ -26,4 +29,11 @@ public class UserController {
         return "/user/show";
     }
     
+    @PostMapping("/updateState")
+    public String updateState(@RequestParam("id") Integer id, UserState state) {
+        User user = userService.findById(id);
+        user.setState(state);
+        userService.save(user);
+        return "redirect:/ticket";
+    }
 }

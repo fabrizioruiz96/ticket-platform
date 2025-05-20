@@ -51,4 +51,9 @@ public class DatabaseUserDetailsService implements UserDetailsService {
     public User findById(Integer id) {
         return userRepo.findById(id).get();
     }
+
+    public User save(User user) {
+        return userRepo.save(user);
+    }
+
 }

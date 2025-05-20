@@ -21,6 +21,17 @@
             </div>
 
             <div class="text-light d-flex align-items-center">
+                <div>
+                    <span th:switch="${#authentication.principal.state.toString()}">
+                        <span th:case="'ATTIVO'" class="badge bg-success" th:text="${#authentication.principal.state}"></span>
+                        <span th:case="'NON_ATTIVO'" class="badge bg-danger text-dark" th:text="${#authentication.principal.state}"></span>
+                    </span>
+                </div>  
+
+                <div>
+                    <a th:href="@{/user/show/{id}(id=${#authentication.principal.id})}" class="btn btn-primary"><i class="bi bi-person-fill"></i></a>
+                </div>
+
                 <div class="mx-3">
                     <div>Utente: <span sec:authentication="name"></span></div>
                     <div>Ruolo: <span sec:authentication="principal.authorities"></span></div>

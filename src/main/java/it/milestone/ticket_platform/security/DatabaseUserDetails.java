@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import it.milestone.ticket_platform.model.Role;
 import it.milestone.ticket_platform.model.User;
+import it.milestone.ticket_platform.model.UserState;
 
 public class DatabaseUserDetails implements UserDetails {
 
@@ -17,6 +18,7 @@ public class DatabaseUserDetails implements UserDetails {
     private final String username;
     private final String email;
     private final String password;
+    private final UserState state;
     private final List<GrantedAuthority> authorities;
 
     public DatabaseUserDetails(User user) {
@@ -24,6 +26,7 @@ public class DatabaseUserDetails implements UserDetails {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.password = user.getPassword();
+        this.state = user.getState();
         this.authorities = new ArrayList<>();
         for(Role role : user.getRoles()) {
             this.authorities.add(new SimpleGrantedAuthority(role.getName()));
@@ -47,6 +50,10 @@ public class DatabaseUserDetails implements UserDetails {
 
     public Integer getId() {
         return this.id;
+    }
+
+    public UserState getState() {
+        return this.state;
     }
 
 }

@@ -139,6 +139,9 @@ public class TicketController {
             return "/ticket/edit";
         }
 
+        Ticket existing = ticketService.findById(formTicket.getId()).get();
+        formTicket.setDateOfCreation(existing.getDateOfCreation());
+
         ticketService.save(formTicket);
         redirectAttributes.addFlashAttribute("successMessage", "Ticket modificato!");
 

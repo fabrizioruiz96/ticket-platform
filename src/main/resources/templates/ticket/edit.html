@@ -11,79 +11,81 @@
 
     <div th:replace="~{fragments/navbar :: nav}"></div>
 
-    <main class="container mb-5">
+    <main class="container mb-5 text-center">
 
-        <div class="text-center my-5">
-            <h1 th:if="${!editMode}">Crea un nuovo ticket</h1>
-            <h1 th:if="${editMode}">Modifica ticket</h1>
-            <hr>
+        <div class="row shadow p-3 w-50 my-3 mx-auto bg-body-tertiary rounded">
+        
+            <div class="my-3">
+                <h1 th:if="${!editMode}">Crea un nuovo ticket</h1>
+                <h1 th:if="${editMode}">Modifica ticket</h1>
+            </div>
+
+            <form id="ticket-form" th:object="${ticket}"
+                th:action="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}" method="post">
+
+                <div class="mb-3">
+                    <label for="inputTitle" class="form-label">Inserisci il titolo</label>
+                    <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:errorClass="is-invalid">
+
+                    <div class="text-start">
+                        <ul th:if="${#fields.hasErrors('title')}">
+                            <li th:each="error : ${#fields.errors('title')}" class="text-danger" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputBody" class="form-label">Inserisci il testo</label>
+                    <textarea class="form-control" id="inputBody" th:field="*{body}" th:errorClass="is-invalid"></textarea>
+
+                    <div class="text-start">
+                        <ul th:if="${#fields.hasErrors('body')}">
+                            <li th:each="error : ${#fields.errors('body')}" class="text-danger" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputCategory" class="form-label">Selezione una categoria</label>
+                    <select th:field="*{category}" id="inputCategory" class="form-select">
+                        <option value="" selected disabled>-- CATEGORIE --</option>
+                        <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                    </select>
+
+                    <div class="text-start">
+                        <ul th:if="${#fields.hasErrors('category')}">
+                            <li th:each="error : ${#fields.errors('category')}" class="text-danger" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputUser" class="form-label">Selezione un'operatore da assegnare</label>
+                    <select th:field="*{user}" id="inputUser" class="form-select">
+                        <option value="" selected disabled>-- OPERATORI --</option>
+                        <option th:each="op : ${userList}" th:value="${op.id}" th:text="${op.username}"></option>
+                    </select>
+
+                    <div class="text-start">
+                        <ul th:if="${#fields.hasErrors('user')}"> 
+                            <li th:each="error : ${#fields.errors('user')}" class="text-danger" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BOTTONI -->
+                <div class="d-flex justify-content-around align-items-center">
+                    <div>
+                        <a th:href="@{/ticket}" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Indietro</a>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg">Salva</button>
+                    <div>
+                        <a th:href="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}" class="btn btn-danger">Cancella
+                            <i class="bi bi-trash"></i></a>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <form id="ticket-form" th:object="${ticket}"
-            th:action="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}" method="post">
-
-            <div class="mb-3">
-                <label for="inputTitle" class="form-label">Inserisci il titolo</label>
-                <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:errorClass="is-invalid">
-
-                <div class="text-start">
-                    <ul th:if="${#fields.hasErrors('title')}">
-                        <li th:each="error : ${#fields.errors('title')}" class="text-danger" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="inputBody" class="form-label">Inserisci il testo</label>
-                <textarea class="form-control" id="inputBody" th:field="*{body}" th:errorClass="is-invalid"></textarea>
-
-                <div class="text-start">
-                    <ul th:if="${#fields.hasErrors('body')}">
-                        <li th:each="error : ${#fields.errors('body')}" class="text-danger" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="inputCategory" class="form-label">Selezione una categoria</label>
-                <select name="category" id="inputCategory" class="form-select">
-                    <option value="" selected disabled>-- CATEGORIE --</option>
-                    <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>
-                </select>
-
-                <div class="text-start">
-                    <ul th:if="${#fields.hasErrors('category')}">
-                        <li th:each="error : ${#fields.errors('category')}" class="text-danger" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="inputUser" class="form-label">Selezione un'operatore da assegnare</label>
-                <select name="user" id="inputUser" class="form-select">
-                    <option value="" selected disabled>-- OPERATORI --</option>
-                    <option th:each="op : ${userList}" th:value="${op.id}" th:text="${op.username}"></option>
-                </select>
-
-                <div class="text-start">
-                    <ul th:if="${#fields.hasErrors('user')}"> 
-                        <li th:each="error : ${#fields.errors('user')}" class="text-danger" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- BOTTONI -->
-            <div class="d-flex justify-content-around align-items-center">
-                <div>
-                    <a th:href="@{/ticket}" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Indietro</a>
-                </div>
-                <button type="submit" class="btn btn-success btn-lg">Salva</button>
-                <div>
-                    <a th:href="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}" class="btn">Cancella
-                        <i class="bi bi-trash"></i></a>
-                </div>
-            </div>
-        </form>
     </main>
 
     <div th:replace="~{fragments/header :: bootstrapScript}"></div>
