@@ -22,11 +22,12 @@
 
             <div class="text-light d-flex align-items-center">
                 <div class="mx-3">
-                    <div>Utente:</div>
-                    <div>Ruolo:</div>
+                    <div>Utente: <span sec:authentication="name"></span></div>
+                    <div>Ruolo: <span sec:authentication="principal.authorities"></span></div>
                 </div>
+                
                 <div>
-                    <a class="btn btn-sm btn-danger" href="#">LOGOUT</a>
+                    <a class="btn btn-sm btn-danger" href="/logout">LOGOUT</a>
                 </div>
             </div>
         </div>

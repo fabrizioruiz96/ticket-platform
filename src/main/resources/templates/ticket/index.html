@@ -21,11 +21,7 @@
     <main class="container mb-5">
 
         <!-- SEZIONE PER FILTRAGGIO E RICERCA DI UN TICKET -->
-        <div class="my-3">
-            <a class="btn btn-warning border border-black" th:href="@{/ticket/create}">Crea un nuovo ticket</a>
-        </div>
-
-        <div class="text-center mb-3">
+        <div class="text-center my-3">
             <h1>Ticket disponibili:</h1>
         </div>
         
@@ -35,13 +31,13 @@
                     <input type="search" name="title" th:value="${keyword}" class="form-control border border-black" placeholder="Inserisci il titolo" aria-label="Inserisci il titolo">
                 </div>
                 <div class="d-inline-block">
-                    <select name="category" id="form-select">
+                    <select name="category" class="form-select border border-black">
                         <option value="" selected>Tutte le categorie</option>                        
                         <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>                       
                     </select>
                 </div>
                 <div class="d-inline-block">
-                    <select name="state" id="form-select">
+                    <select name="state" class="form-select border border-black">
                         <option value="" selected>Qualsiasi stato</option>
                         <option th:each="state : ${stateList}" th:value="${state}" th:text="${state}"></option>
                     </select>
@@ -51,11 +47,15 @@
                 </div>
             </form>
         </div>
-
+        
+        <div class="my-3">
+            <a class="btn btn-warning border border-black" th:href="@{/ticket/create}">Crea un nuovo ticket</a>
+        </div>
+        
         <div th:if="${ticketList.isEmpty()}" class="text-center mb-5">
             <p>Nessun ticket da visualizzare!</p>
         </div>
-
+        
         <div th:unless="${ticketList.isEmpty()}">
             <table class="table table-success table-striped table-hover">
                 <thead>

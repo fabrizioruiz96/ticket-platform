@@ -12,17 +12,17 @@
 
     <main class="container mb-5 text-center d-flex flex-column align-items-center">
 
-        <div class="mt-3 mb-5">
+        <div class="mt-3 mb-4">
             <h1 th:text="${ticket.title}"></h1>
             <hr>
         </div>
 
-        <div class="shadow-sm p-3 bg-body-tertiary rounded d-inline-block">
+        <div class="shadow-sm mb-3 p-3 bg-body-tertiary rounded d-inline-block">
             <p th:text="${ticket.body}"></p>
             <p th:text="${ticket.category.name}"></p>
         </div>
 
-        <div>
+        <div class="mb-3">
             <form id="ticket-form" th:action="@{/ticket/updateState}" method="post">
                 <input type="hidden" name="id" th:value="${ticket.id}"/>
                 
@@ -32,7 +32,7 @@
                     <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}" th:selected="${ticket.state == state}"></option>
                 </select>
                 
-                <button type="submit">Cambia stato</button>
+                <button class="my-3" type="submit">Cambia stato</button>
             </form>
         </div>
 
@@ -56,9 +56,9 @@
                 </thead>
                 <tbody>
                     <tr th:each="note : ${noteList}">
-                        <td th:text="${note.dateOfCreation}"></td>
+                        <th th:text="${note.dateOfCreation}"></th>
                         <td th:text="${#strings.abbreviate(note.body, 100)}"></td>
-                        <td></td>
+                        <th th:text="${note.user.username}"></th>
                     </tr>
                 </tbody>
             </table>

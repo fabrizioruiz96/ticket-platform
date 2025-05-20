@@ -53,6 +53,20 @@ public class Ticket {
     @OneToMany(mappedBy="ticket")
     private List<Note> notes;
 
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name="user_id", nullable=false)
+    @NotNull(message="Seleziona un'operatore")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public List<Note> getNotes() {
         return notes;
     }

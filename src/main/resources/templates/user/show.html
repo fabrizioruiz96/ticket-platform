@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/header :: head}"></div>
+    <title th:text="|Ticke Platform - ${user.username}|"></title>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/navbar :: nav}"></div>
+
+    <main class="container mb-5 text-center">
+
+    </main>
+
+    <div th:replace="~{fragments/header :: bootstrapScript}"></div>
+</body>
+</html>

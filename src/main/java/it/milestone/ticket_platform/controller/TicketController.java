@@ -3,6 +3,7 @@ package it.milestone.ticket_platform.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.milestone.ticket_platform.model.Note;
 import it.milestone.ticket_platform.model.Ticket;
 import it.milestone.ticket_platform.model.TicketState;
+import it.milestone.ticket_platform.model.User;
+import it.milestone.ticket_platform.model.UserState;
 import it.milestone.ticket_platform.repository.CategoryRepository;
+import it.milestone.ticket_platform.security.DatabaseUserDetails;
+import it.milestone.ticket_platform.security.DatabaseUserDetailsService;
 import it.milestone.ticket_platform.service.TicketService;
 import jakarta.validation.Valid;
 
@@ -31,11 +36,15 @@ public class TicketController {
     @Autowired
     private CategoryRepository catRepo;
 
+    @Autowired
+    private DatabaseUserDetailsService userService;
+
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("ticket", new Ticket());
         model.addAttribute("catList", catRepo.findAll());
         model.addAttribute("editMode", false);
+        model.addAttribute("userList", userService.findByState(UserState.ATTIVO));
         return "/ticket/edit";
     }
 
@@ -49,6 +58,7 @@ public class TicketController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("editMode", false);
             model.addAttribute("catList", catRepo.findAll());
+            model.addAttribute("userList", userService.findByState(UserState.ATTIVO));
             return "/ticket/edit";
         }
 
@@ -59,15 +69,21 @@ public class TicketController {
     }
 
     @GetMapping
-    public String index(
+    public String index(@AuthenticationPrincipal DatabaseUserDetails user,
             @RequestParam(name="title", required = false) String title,
             @RequestParam(name="category", required = false) Integer cat,
             @RequestParam(name="state", required = false) TicketState state,
             Model model) {
 
-        model.addAttribute("ticketList", ticketService.findTicket(title, cat, state));
+        if(userService.isOperator(user)){
+            model.addAttribute("ticketList", ticketService.findByUser(user.getId()));
+        } else {
+            model.addAttribute("ticketList", ticketService.findTicket(title, cat, state));
+        }
+
         model.addAttribute("catList", catRepo.findAll());
         model.addAttribute("stateList", TicketState.values());
+        model.addAttribute("user", user);
         
         return "ticket/index";
     }
@@ -103,6 +119,8 @@ public class TicketController {
         model.addAttribute("ticket", ticketService.findById(id).get());
         model.addAttribute("catList", catRepo.findAll());
         model.addAttribute("editMode", true);
+        model.addAttribute("userList", userService.findByState(UserState.ATTIVO));
+
         return "/ticket/edit";
     }
 
@@ -117,6 +135,7 @@ public class TicketController {
             model.addAttribute("ticket", formTicket);
             model.addAttribute("catList", catRepo.findAll());
             model.addAttribute("editMode", true);
+            model.addAttribute("userList", userService.findByState(UserState.ATTIVO));
             return "/ticket/edit";
         }
 
@@ -133,9 +152,11 @@ public class TicketController {
     }
 
     @GetMapping("/{id}/note")
-    public String note(@PathVariable("id") Integer id, Model model) {
+    public String note(@AuthenticationPrincipal DatabaseUserDetails userDetails, 
+            @PathVariable("id") Integer id, Model model) {
         Ticket ticket = ticketService.findById(id).get();
-        Note note = new Note(ticket);
+        User user = userService.findById(userDetails.getId());
+        Note note = new Note(ticket, user);
 
         model.addAttribute("note", note);
         model.addAttribute("editMode", false);

@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.milestone.ticket_platform.model.Note;
 import it.milestone.ticket_platform.model.Ticket;
 import it.milestone.ticket_platform.model.TicketState;
+import it.milestone.ticket_platform.repository.NoteRepository;
 import it.milestone.ticket_platform.repository.TicketRepository;
 
 @Service
@@ -15,6 +17,9 @@ public class TicketService {
 
     @Autowired
     private TicketRepository ticketRepo;
+
+    @Autowired
+    private NoteRepository noteRepo;
 
     public List<Ticket> findTicket (String title, Integer cat, TicketState state) {
         
@@ -43,6 +48,10 @@ public class TicketService {
         return result;
     }
 
+    public List<Ticket> findByUser(Integer id) {
+        return ticketRepo.findByUser_Id(id);
+    }
+
     public Optional<Ticket> findById (Integer id) {
         return ticketRepo.findById(id);
     }
@@ -52,6 +61,10 @@ public class TicketService {
     }
 
     public void delete (Integer id) {
+        Ticket ticket = ticketRepo.findById(id).get();
+        for (Note note : ticket.getNotes()) {
+            noteRepo.deleteById(note.getId());
+        }
         ticketRepo.deleteById(id);
     }
 }

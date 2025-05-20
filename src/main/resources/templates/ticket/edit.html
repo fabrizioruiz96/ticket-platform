@@ -47,13 +47,27 @@
             <div class="mb-3">
                 <label for="inputCategory" class="form-label">Selezione una categoria</label>
                 <select name="category" id="inputCategory" class="form-select">
-                    <option value="" selected disabled>Seleziona una categoria</option>
+                    <option value="" selected disabled>-- CATEGORIE --</option>
                     <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>
                 </select>
 
                 <div class="text-start">
                     <ul th:if="${#fields.hasErrors('category')}">
                         <li th:each="error : ${#fields.errors('category')}" class="text-danger" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="inputUser" class="form-label">Selezione un'operatore da assegnare</label>
+                <select name="user" id="inputUser" class="form-select">
+                    <option value="" selected disabled>-- OPERATORI --</option>
+                    <option th:each="op : ${userList}" th:value="${op.id}" th:text="${op.username}"></option>
+                </select>
+
+                <div class="text-start">
+                    <ul th:if="${#fields.hasErrors('user')}"> 
+                        <li th:each="error : ${#fields.errors('user')}" class="text-danger" th:text="${error}"></li>
                     </ul>
                 </div>
             </div>

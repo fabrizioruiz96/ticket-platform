@@ -38,11 +38,26 @@ public class Note {
     @NotNull
     private Ticket ticket;
 
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name="user_id", nullable=false)
+    @NotNull
+    private User user;
+
     public Note() {
     }
 
-    public Note(Ticket ticket) {
+    public Note(Ticket ticket, User user) {
         this.ticket = ticket;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Ticket getTicket() {

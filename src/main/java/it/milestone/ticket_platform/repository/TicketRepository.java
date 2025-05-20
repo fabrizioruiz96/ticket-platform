@@ -17,4 +17,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     public List<Ticket> findByCategoryIdAndState(Integer cat, TicketState state);
     public List<Ticket> findByTitleContainingIgnoreCaseAndCategoryIdAndState(String title, Integer cat, TicketState state);
 
+    public List<Ticket> findByUser_Id(Integer user);
 }
