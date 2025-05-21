@@ -9,7 +9,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class User {
@@ -17,13 +19,15 @@ public class User {
     @Id
     private Integer id;
 
-    @NotNull
+    @NotBlank(message="Lo username non può essere vuoto")
     private String username;
 
-    @NotNull
+    @NotBlank(message="L'email non può essere vuota")
+    @Email(message="Inserisci un indirizzo email valido")
     private String email;
 
-    @NotNull
+    @NotBlank(message="La password non può essere vuota")
+    @Size(min=8, max=64, message="La password deve contenere tra 8 e 64 caratteri")
     private String password;
 
     @Enumerated(EnumType.STRING)

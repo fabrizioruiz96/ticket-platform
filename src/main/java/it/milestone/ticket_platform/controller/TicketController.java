@@ -47,6 +47,7 @@ public class TicketController {
         model.addAttribute("userList", userService.findByState(UserState.ATTIVO));
         return "/ticket/edit";
     }
+        
 
     @PostMapping("/create")
     public String store(
@@ -83,7 +84,7 @@ public class TicketController {
 
         model.addAttribute("catList", catRepo.findAll());
         model.addAttribute("stateList", TicketState.values());
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findById(user.getId()));
         
         return "ticket/index";
     }

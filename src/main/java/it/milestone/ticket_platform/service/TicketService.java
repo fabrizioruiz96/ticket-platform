@@ -56,6 +56,10 @@ public class TicketService {
         return ticketRepo.findById(id);
     }
 
+    public List<Ticket> findByUserAndState(Integer id, TicketState state) {
+        return ticketRepo.findByUser_IdAndState(id, state);
+    }
+
     public Ticket save (Ticket ticket) {
         return ticketRepo.save(ticket);
     }

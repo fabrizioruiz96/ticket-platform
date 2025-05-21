@@ -10,22 +10,56 @@
 
     <div th:replace="~{fragments/navbar :: nav}"></div>
 
-    <main class="container mb-5 text-center">
+    <main class="container mb-5">
 
-        <div class="row shadow p-3 w-50 my-3 mx-auto bg-body-tertiary rounded">
-            <h2>Ciao, <span th:text="${user.username}"></span></h2>
+        <div class="shadow p-3 w-50 my-3 mx-auto bg-body-tertiary rounded">
+            <h2 class="text-center">Profilo utente</h2>
 
-            <form th:action="@{/user/updateState}" method="post">
-                <input type="hidden" name="id" th:value="${user.id}"/>
-
-                <label for="changeState" class="form-label">Cambia il tuo stato</label>
-
-                <select name="state" id="changeState" class="form-select">
-                    <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}" th:selected="${user.state == state}"></option>
-                </select>
+            <div class="card shadow-sm p-4">
+                <ul class="list-group mb-4">
+                    <li class="list-group-item">
+                        <strong>Nome utente:</strong>
+                        <span th:text="${user.username}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Email:</strong>
+                        <span th:text="${user.email}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Ruolo:</strong>
+                        <span class="badge bg-secondary" sec:authentication="principal.authorities"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Stato:</strong>
+                        <span th:switch="${user.state.name}">
+                            <span th:case="'ATTIVO'" class="badge bg-success" th:text="${user.state}"></span>
+                            <span th:case="'NON_ATTIVO'" class="badge bg-danger" th:text="${user.state}"></span>
+                        </span>
+                    </li>
+                </ul>
                 
-                <button type="submit" class="btn btn-primary"><i class="bi bi-pencil"></i></button>
-            </form>
+                <form th:action="@{/user/updateState}" method="post">
+                    <input type="hidden" name="id" th:value="${user.id}"/>
+                    <label for="changeState" class="form-label"><strong>Modifica stato</strong></label>
+                    <div th:if="${!editState}" class="input-group">
+                        <select name="state" id="changeState" class="form-select" disabled>
+                            <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}" th:selected="${user.state == state}"></option>
+                        </select>
+                        <button type="submit" class="btn btn-primary" disabled><i class="bi bi-pencil"></i></button>
+                    </div>
+                    <div th:if="${editState}" class="input-group">
+                        <select name="state" id="changeState" class="form-select">
+                            <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}" th:selected="${user.state == state}"></option>
+                        </select>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-pencil"></i></button>
+                    </div>
+                </form>
+                
+                <div class="mt-3">
+                    <a th:href="@{|/user/${user.id}/edit|}" class="btn btn-warning">Modifica Dati</a>
+                </div>
+            </div>
+        
         </div>
     </main>
 
