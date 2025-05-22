@@ -80,6 +80,13 @@ public class TicketController {
             model.addAttribute("ticketList", ticketService.findByUser(user.getId()));
         } else {
             model.addAttribute("ticketList", ticketService.findTicket(title, cat, state));
+            model.addAttribute("isAdmin", true);
+        }
+
+        if(userService.findByState(UserState.ATTIVO).isEmpty()) {
+            model.addAttribute("userAvailable", false);
+        } else {
+            model.addAttribute("userAvailable", true);
         }
 
         model.addAttribute("catList", catRepo.findAll());
@@ -90,7 +97,8 @@ public class TicketController {
     }
 
     @GetMapping("/show/{id}")
-    public String show(@PathVariable("id") Integer id, Model model) {
+    public String show(@AuthenticationPrincipal DatabaseUserDetails user,
+        @PathVariable("id") Integer id, Model model) {
 
         Optional<Ticket> optTicket = ticketService.findById(id);
 
@@ -100,6 +108,7 @@ public class TicketController {
             return "/error_pages/generalError";
         }
 
+        model.addAttribute("newNote", new Note(ticketService.findById(id).get(), userService.findById(user.getId())));
         model.addAttribute("ticket", optTicket.get());
         model.addAttribute("stateList", TicketState.values());
         model.addAttribute("noteList", optTicket.get().getNotes());

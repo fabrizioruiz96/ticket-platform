@@ -44,9 +44,9 @@
 
                 <div class="d-flex justify-content-around align-items-center">
                     <div>
-                        <a th:href="@{|/user/show/*{id}|}" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Indietro</a>
+                        <a th:href="@{|/user/show/*{id}|}" class="btn btn-warning"><i class="bi bi-arrow-left"></i> Indietro</a>
                     </div>
-                    <button type="submit" class="btn btn-success btn-lg">Salva</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Salva</button>
                     <div>
                         <a th:href="@{/user/{id}/edit(id=${user.id})}" class="btn btn-danger">Cancella
                             <i class="bi bi-trash"></i></a>

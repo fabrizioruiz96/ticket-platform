@@ -65,12 +65,16 @@
                 </form>
                 
                 <div class="col-auto ms-auto" sec:authorize="hasAuthority('ADMIN')">
-                    <a class="btn btn-warning border border-black" th:href="@{/ticket/create}">Crea un nuovo ticket</a>
+                    <a th:if="${userAvailable}" class="btn btn-warning border border-black" th:href="@{/ticket/create}">Crea un nuovo ticket</a>
+                    <div th:if="${!userAvailable}">
+                        <a class="btn btn-warning border border-black disabled" href="#">Crea un nuovo ticket</a>
+                        <div class="form-text text-danger mt-1">Nessun operatore attivo</div>
+                    </div>
                 </div>
             </div>
             
             <!-- VISUALIZZAZIONE DEI TICKET -->
-            <div th:if="${ticketList.isEmpty()}" class="text-center mb-5">
+            <div th:if="${ticketList.isEmpty()}" class="text-center mb-5 alert alert-info">
                 <p>Nessun ticket da visualizzare!</p>
             </div>
             

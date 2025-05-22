@@ -3,70 +3,106 @@
 
 <head>
     <div th:replace="~{fragments/header :: head}"></div>
-    <title th:text="|Ticke Platform - ${ticket.title}|"></title>
+    <title th:text="|Ticket Platform - ${ticket.title}|"></title>
 </head>
 
 <body>
 
     <div th:replace="~{fragments/navbar :: nav}"></div>
 
-    <main class="container mb-5 text-center d-flex flex-column align-items-center">
+    <main class="container mb-5">
 
-        <div class="shadow p-3 my-3 bg-body-tertiary rounded">
-        
-        <div class="my-3">
-            <h1 th:text="${ticket.title}"></h1>
+        <h2 class="my-3">Dettaglio Ticket</h2>
+
+        <!-- CARD CON DETTAGLI TICKET -->
+        <div class="card shadow p-3 mb-3 rounded">
+            <div class="card-body">
+
+                <h3 class="card-title" th:text="${ticket.title}"></h3>
+                <p class="card-text" th:text="${ticket.body}"></p>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Categoria: </strong>
+                        <span th:text="${ticket.category.name}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Stato: </strong>
+                                <span th:switch="${ticket.state.name}">
+                                    <span th:case="'DA_FARE'" class="badge bg-primary" th:text="${ticket.state}"></span>
+                                    <span th:case="'IN_CORSO'" class="badge bg-warning text-dark"
+                                        th:text="${ticket.state}"></span>
+                                    <span th:case="'COMPLETATO'" class="badge bg-success"
+                                        th:text="${ticket.state}"></span>
+                                </span>
+                            </div>
+                            <div>
+                                <form th:action="@{/ticket/updateState}" method="post" class="gap-1 d-flex">
+                                    <input type="hidden" name="id" th:value="${ticket.id}" />
+
+                                    <div class="input-group">
+                                        <select name="state" id="changeState" class="form-select">
+                                            <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}"
+                                                th:selected="${ticket.state == state}"></option>
+                                        </select>
+                                        <button class="btn btn-primary" type="submit"><i
+                                                class="bi bi-pencil"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Operatore: </strong>
+                        <span th:text="${ticket.user.username}"></span>
+                    </li>
+                </ul>
+
+            </div>
         </div>
 
-            <p th:text="${ticket.body}"></p>
-            <p th:text="${ticket.category.name}"></p>
-        </div>
-
+        <!-- SEZIONE VISUALIZZAZIONE NOTE -->
         <div class="mb-3">
-            <form id="ticket-form" th:action="@{/ticket/updateState}" method="post">
-                <input type="hidden" name="id" th:value="${ticket.id}"/>
+            <h3>Note:</h3>
 
-                <label for="changeState" class="form-label">Cambia lo stato di lavorazione del ticket</label>
+            <div th:if="${ticket.notes.isEmpty()}" class="alert alert-success d-inline-block">
+                Nessuna nota presente
+            </div>
 
-                <div class="input-group">
-                    <select name="state" id="changeState" class="form-select">
-                        <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}" th:selected="${ticket.state == state}"></option>
-                    </select>
-                    <button class="my-3 btn btn-primary" type="submit"><i class="bi bi-pencil"></i></button>
+            <ul th:unless="${ticket.notes.isEmpty()}" class="list-group">
+                <li class="list-group-item" th:each="note : ${ticket.notes}">
+                    <div class="d-flex justify-content-between">
+                        <strong th:text="${note.user.username}"></strong>
+                        <em th:text="${note.dateOfCreation}"></em>
+                    </div>
+                    <p th:text="${note.body}"></p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- SEZIONE FORM PER AGGIUNTA NOTE -->
+        <div class="shadow p-3 mb-3 rounded">
+            <form id="noteForm" th:action="@{/note/create}" method="post" th:object="${newNote}">
+                <input type="hidden" th:field="*{id}" th:value="*{id}">
+                <input type="hidden" th:field="*{ticket}" th:value="*{ticket}">
+                <input type="hidden" th:field="*{user}" th:value="*{user}">
+
+                <div class="mb-3">
+                    <label for="inputNote" class="form-label">
+                        <h4>Aggiungi una nota</h4>
+                    </label>
+                    <textarea th:field="*{body}" id="inputNote" class="form-control"></textarea>
                 </div>
-                
+
+                <button type="submit" class="btn btn-primary">Aggiungi</button>
             </form>
         </div>
 
-        <!-- SEZIONE PER LE NOTE -->
-        <div>
-            <a th:href="@{|/ticket/${ticket.id}/note|}" class="btn btn-warning border border-black">Crea nota</a>
-        </div>
-
-        <div th:unless="${ticket.notes.size > 0}" class="text-center">
-            <span>Nessuna nota da visualizzare</span>
-        </div>
-
-        <div th:if="${ticket.notes.size > 0}">
-            <table class="table table-success table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Data di creazione</th>
-                        <th scope="col">Testo</th>
-                        <th scope="col">Creata da:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="note : ${noteList}">
-                        <th th:text="${note.dateOfCreation}"></th>
-                        <td th:text="${#strings.abbreviate(note.body, 100)}"></td>
-                        <th th:text="${note.user.username}"></th>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </main>
 
     <div th:replace="~{fragments/header :: bootstrapScript}"></div>
 </body>
+
 </html>
