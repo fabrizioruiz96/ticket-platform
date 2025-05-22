@@ -47,7 +47,6 @@ public class TicketController {
         model.addAttribute("userList", userService.findByState(UserState.ATTIVO));
         return "/ticket/edit";
     }
-        
 
     @PostMapping("/create")
     public String store(
@@ -71,19 +70,19 @@ public class TicketController {
 
     @GetMapping
     public String index(@AuthenticationPrincipal DatabaseUserDetails user,
-            @RequestParam(name="title", required = false) String title,
-            @RequestParam(name="category", required = false) Integer cat,
-            @RequestParam(name="state", required = false) TicketState state,
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "category", required = false) Integer cat,
+            @RequestParam(name = "state", required = false) TicketState state,
             Model model) {
 
-        if(userService.isOperator(user)){
+        if (userService.isOperator(user)) {
             model.addAttribute("ticketList", ticketService.findByUser(user.getId()));
         } else {
             model.addAttribute("ticketList", ticketService.findTicket(title, cat, state));
             model.addAttribute("isAdmin", true);
         }
 
-        if(userService.findByState(UserState.ATTIVO).isEmpty()) {
+        if (userService.findByState(UserState.ATTIVO).isEmpty()) {
             model.addAttribute("userAvailable", false);
         } else {
             model.addAttribute("userAvailable", true);
@@ -92,13 +91,13 @@ public class TicketController {
         model.addAttribute("catList", catRepo.findAll());
         model.addAttribute("stateList", TicketState.values());
         model.addAttribute("user", userService.findById(user.getId()));
-        
+
         return "ticket/index";
     }
 
     @GetMapping("/show/{id}")
     public String show(@AuthenticationPrincipal DatabaseUserDetails user,
-        @PathVariable("id") Integer id, Model model) {
+            @PathVariable("id") Integer id, Model model) {
 
         Optional<Ticket> optTicket = ticketService.findById(id);
 
@@ -165,7 +164,7 @@ public class TicketController {
     }
 
     @GetMapping("/{id}/note")
-    public String note(@AuthenticationPrincipal DatabaseUserDetails userDetails, 
+    public String note(@AuthenticationPrincipal DatabaseUserDetails userDetails,
             @PathVariable("id") Integer id, Model model) {
         Ticket ticket = ticketService.findById(id).get();
         User user = userService.findById(userDetails.getId());

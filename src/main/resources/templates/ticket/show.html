@@ -12,7 +12,12 @@
 
     <main class="container mb-5">
 
-        <h2 class="my-3">Dettaglio Ticket</h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="my-3">Dettaglio Ticket</h2>
+
+            <a th:href="@{/ticket}" class="btn btn-primary border border-black"><i class="bi bi-arrow-left"></i>
+                Indietro</a>
+        </div>
 
         <!-- CARD CON DETTAGLI TICKET -->
         <div class="card shadow p-3 mb-3 rounded">
@@ -31,10 +36,11 @@
                             <div>
                                 <strong>Stato: </strong>
                                 <span th:switch="${ticket.state.name}">
-                                    <span th:case="'DA_FARE'" class="badge bg-primary" th:text="${ticket.state}"></span>
-                                    <span th:case="'IN_CORSO'" class="badge bg-warning text-dark"
+                                    <span th:case="'DA_FARE'" class="badge bg-primary border border-black"
                                         th:text="${ticket.state}"></span>
-                                    <span th:case="'COMPLETATO'" class="badge bg-success"
+                                    <span th:case="'IN_CORSO'" class="badge bg-warning text-dark border border-black"
+                                        th:text="${ticket.state}"></span>
+                                    <span th:case="'COMPLETATO'" class="badge bg-success border border-black"
                                         th:text="${ticket.state}"></span>
                                 </span>
                             </div>
@@ -43,11 +49,11 @@
                                     <input type="hidden" name="id" th:value="${ticket.id}" />
 
                                     <div class="input-group">
-                                        <select name="state" id="changeState" class="form-select">
-                                            <option th:each="state : ${stateList}" th:text="${state}" th:value="${state}"
-                                                th:selected="${ticket.state == state}"></option>
+                                        <select name="state" id="changeState" class="form-select border border-black">
+                                            <option th:each="state : ${stateList}" th:text="${state}"
+                                                th:value="${state}" th:selected="${ticket.state == state}"></option>
                                         </select>
-                                        <button class="btn btn-primary" type="submit"><i
+                                        <button class="btn btn-primary border border-black" type="submit"><i
                                                 class="bi bi-pencil"></i></button>
                                     </div>
                                 </form>
@@ -96,7 +102,7 @@
                     <textarea th:field="*{body}" id="inputNote" class="form-control"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Aggiungi</button>
+                <button type="submit" class="btn btn-primary border border-black">Aggiungi</button>
             </form>
         </div>
 

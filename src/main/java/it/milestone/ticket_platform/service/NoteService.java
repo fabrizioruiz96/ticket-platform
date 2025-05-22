@@ -9,7 +9,7 @@ import it.milestone.ticket_platform.repository.NoteRepository;
 @Service
 public class NoteService {
 
-    @Autowired 
+    @Autowired
     private NoteRepository noteRepo;
 
     public Note getNoteById(Integer id) {

@@ -14,7 +14,7 @@
     <main class="container mb-5">
 
         <div class="row shadow p-3 w-50 my-3 mx-auto bg-body-tertiary rounded">
-        
+
             <div class="my-3 text-center">
                 <h1 th:if="${!editMode}">Crea un nuovo ticket</h1>
                 <h1 th:if="${editMode}">Modifica ticket</h1>
@@ -25,18 +25,21 @@
 
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label"><strong>Inserisci il titolo</strong></label>
-                    <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:errorClass="is-invalid">
+                    <input type="text" class="form-control" id="inputTitle" th:field="*{title}"
+                        th:errorClass="is-invalid">
 
                     <div class="text-start">
                         <ul th:if="${#fields.hasErrors('title')}">
-                            <li th:each="error : ${#fields.errors('title')}" class="text-danger" th:text="${error}"></li>
+                            <li th:each="error : ${#fields.errors('title')}" class="text-danger" th:text="${error}">
+                            </li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="inputBody" class="form-label"><strong>Inserisci il testo</strong></label>
-                    <textarea class="form-control" id="inputBody" th:field="*{body}" th:errorClass="is-invalid"></textarea>
+                    <textarea class="form-control" id="inputBody" th:field="*{body}"
+                        th:errorClass="is-invalid"></textarea>
 
                     <div class="text-start">
                         <ul th:if="${#fields.hasErrors('body')}">
@@ -58,13 +61,15 @@
 
                     <div class="text-start">
                         <ul th:if="${#fields.hasErrors('category')}">
-                            <li th:each="error : ${#fields.errors('category')}" class="text-danger" th:text="${error}"></li>
+                            <li th:each="error : ${#fields.errors('category')}" class="text-danger" th:text="${error}">
+                            </li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="inputUser" class="form-label"><strong>Selezione un'operatore da assegnare</strong></label>
+                    <label for="inputUser" class="form-label"><strong>Selezione un'operatore da
+                            assegnare</strong></label>
                     <select th:if="${editMode}" th:field="*{user}" id="inputUser" class="form-select">
                         <option value="" selected disabled>-- OPERATORI --</option>
                         <option th:each="op : ${userList}" th:value="${op.id}" th:text="${op.username}"></option>
@@ -75,7 +80,7 @@
                     </select>
 
                     <div class="text-start">
-                        <ul th:if="${#fields.hasErrors('user')}"> 
+                        <ul th:if="${#fields.hasErrors('user')}">
                             <li th:each="error : ${#fields.errors('user')}" class="text-danger" th:text="${error}"></li>
                         </ul>
                     </div>
@@ -84,11 +89,13 @@
                 <!-- BOTTONI -->
                 <div class="d-flex justify-content-around align-items-center">
                     <div>
-                        <a th:href="@{/ticket}" class="btn btn-warning"><i class="bi bi-arrow-left"></i> Indietro</a>
+                        <a th:href="@{/ticket}" class="btn btn-warning border border-black"><i
+                                class="bi bi-arrow-left"></i> Indietro</a>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg">Salva</button>
+                    <button type="submit" class="btn btn-primary btn-lg border border-black">Salva</button>
                     <div>
-                        <a th:href="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}" class="btn btn-danger">Cancella
+                        <a th:href="${editMode} ? @{|/ticket/edit/${ticket.id}|} : @{/ticket/create}"
+                            class="btn btn-danger border border-black">Cancella
                             <i class="bi bi-trash"></i></a>
                     </div>
                 </div>

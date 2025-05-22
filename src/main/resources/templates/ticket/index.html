@@ -19,65 +19,70 @@
     </div>
 
     <main class="container mb-5">
-        
+
         <!-- DATI UTENTE LOGGATO -->
         <div class="my-3">
             <div class="d-flex">
                 <h2>Ciao, <span th:text="${user.username}"></span></h2>
                 <span class="ms-auto" th:switch="${user.state.name}">
-                    <span th:case="'ATTIVO'" class="badge bg-success" th:text="${user.state}"></span>
-                    <span th:case="'NON_ATTIVO'" class="badge bg-danger" th:text="${user.state}"></span>
+                    <span th:case="'ATTIVO'" class="badge bg-success border border-black"
+                        th:text="${user.state}"></span>
+                    <span th:case="'NON_ATTIVO'" class="badge bg-danger border border-black"
+                        th:text="${user.state}"></span>
                 </span>
             </div>
-            <span sec:authentication="principal.authorities" class="badge bg-secondary"></span>
+            <span sec:authentication="principal.authorities" class="badge bg-secondary border border-black"></span>
         </div>
 
         <div class="row shadow p-3 my-3 mx-auto bg-body-tertiary rounded">
             <div class="text-center my-3">
                 <h2>Ticket disponibili:</h2>
             </div>
-            
+
             <!-- SEZIONE PER FILTRAGGIO E RICERCA E AGGIUNTA DI UN TICKET-->
             <div class="mb-3 row">
                 <form th:action="@{/ticket}" method="get" class="col-8">
 
                     <div class="d-inline-block">
-                        <input type="search" name="title" th:value="${keyword}" class="form-control border border-black" placeholder="Inserisci il titolo" aria-label="Inserisci il titolo">
+                        <input type="search" name="title" th:value="${keyword}" class="form-control border border-black"
+                            placeholder="Inserisci il titolo" aria-label="Inserisci il titolo">
                     </div>
-                    
+
                     <div class="d-inline-block">
                         <select name="category" class="form-select border border-black">
-                            <option value="" selected>Tutte le categorie</option>                        
-                            <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>                       
+                            <option value="" selected>Tutte le categorie</option>
+                            <option th:each="cat : ${catList}" th:value="${cat.id}" th:text="${cat.name}"></option>
                         </select>
                     </div>
-                    
+
                     <div class="d-inline-block">
                         <select name="state" class="form-select border border-black">
                             <option value="" selected>Qualsiasi stato</option>
                             <option th:each="state : ${stateList}" th:value="${state}" th:text="${state}"></option>
                         </select>
                     </div>
-                    
+
                     <div class="d-inline-block">
-                        <button class="btn btn-warning border border-black" type="submit"><i class="bi bi-search"></i></button>
+                        <button class="btn btn-warning border border-black" type="submit"><i
+                                class="bi bi-search"></i></button>
                     </div>
                 </form>
-                
+
                 <div class="col-auto ms-auto" sec:authorize="hasAuthority('ADMIN')">
-                    <a th:if="${userAvailable}" class="btn btn-warning border border-black" th:href="@{/ticket/create}">Crea un nuovo ticket</a>
+                    <a th:if="${userAvailable}" class="btn btn-warning border border-black"
+                        th:href="@{/ticket/create}">Crea un nuovo ticket</a>
                     <div th:if="${!userAvailable}">
                         <a class="btn btn-warning border border-black disabled" href="#">Crea un nuovo ticket</a>
                         <div class="form-text text-danger mt-1">Nessun operatore attivo</div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- VISUALIZZAZIONE DEI TICKET -->
             <div th:if="${ticketList.isEmpty()}" class="text-center mb-5 alert alert-info">
                 <p>Nessun ticket da visualizzare!</p>
             </div>
-            
+
             <div th:unless="${ticketList.isEmpty()}">
                 <table class="table table-secondary table-striped table-hover text-center">
                     <thead>
@@ -89,7 +94,8 @@
                             <th scope="col">Stato</th>
                             <th scope="col"> <!--Spazio per il dettaglio--> </th>
                             <th scope="col" sec:authorize="hasAuthority('ADMIN')"> <!-- Spazio per la modifica --> </th>
-                            <th scope="col" sec:authorize="hasAuthority('ADMIN')"> <!--Spazio per eliminare ticket--> </th>
+                            <th scope="col" sec:authorize="hasAuthority('ADMIN')"> <!--Spazio per eliminare ticket-->
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,23 +106,30 @@
                             <td th:text="${ticket.category.name}"></td>
                             <td>
                                 <span th:switch="${ticket.state.name}">
-                                    <span th:case="'DA_FARE'" class="badge bg-primary" th:text="${ticket.state}"></span>
-                                    <span th:case="'IN_CORSO'" class="badge bg-warning text-dark" th:text="${ticket.state}"></span>
-                                    <span th:case="'COMPLETATO'" class="badge bg-success" th:text="${ticket.state}"></span>
+                                    <span th:case="'DA_FARE'" class="badge bg-primary border border-black"
+                                        th:text="${ticket.state}"></span>
+                                    <span th:case="'IN_CORSO'" class="badge bg-warning text-dark border border-black"
+                                        th:text="${ticket.state}"></span>
+                                    <span th:case="'COMPLETATO'" class="badge bg-success border border-black"
+                                        th:text="${ticket.state}"></span>
                                 </span>
                             </td>
                             <!-- AGGIUNGERE BOTTONE PER ANDARE AL DETTAGLIO DEL TICKET -->
                             <td>
-                                <a th:href="@{|/ticket/show/${ticket.id}|}" class="btn btn-warning"><i class="bi bi-card-list"></i></a>
+                                <a th:href="@{|/ticket/show/${ticket.id}|}"
+                                    class="btn btn-warning border border-black"><i class="bi bi-card-list"></i></a>
                             </td>
                             <!-- AGGIUNGERE BOTTONE PER MODIFICARE IL TICKET -->
                             <td sec:authorize="hasAuthority('ADMIN')">
-                                <a th:href="@{|/ticket/edit/${ticket.id}|}" class="btn btn-success"><i class="bi bi-pencil"></i></a>
+                                <a th:href="@{|/ticket/edit/${ticket.id}|}"
+                                    class="btn btn-success border border-black"><i class="bi bi-pencil"></i></a>
                             </td>
                             <!-- AGGIUNGERE BOTTONE PER ELIMINARE IL TICKET -->
                             <td sec:authorize="hasAuthority('ADMIN')">
                                 <form th:action="@{|/ticket/delete/${ticket.id}|}" method="post">
-                                    <button class="btn btn-danger" type="submit" id="submitButton" onclick="return confirm('Sicuro di voler eliminare questo ticket?')"><i class="bi bi-trash-fill"></i></button>
+                                    <button class="btn btn-danger border border-black" type="submit" id="submitButton"
+                                        onclick="return confirm('Sicuro di voler eliminare questo ticket?')"><i
+                                            class="bi bi-trash-fill"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -128,4 +141,5 @@
 
     <div th:replace="~{fragments/header :: bootstrapScript}"></div>
 </body>
+
 </html>

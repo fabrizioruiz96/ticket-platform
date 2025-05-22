@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-    
+
     <nav th:fragment="nav" class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/ticket">
@@ -22,9 +22,10 @@
 
             <div class="text-light d-flex align-items-center gap-2">
                 <div>
-                    <a th:href="@{/user/show/{id}(id=${#authentication.principal.id})}" class="btn btn-sm btn-primary"><i class="bi bi-person-fill"></i></a>
+                    <a th:href="@{/user/show/{id}(id=${#authentication.principal.id})}"
+                        class="btn btn-sm btn-primary"><i class="bi bi-person-fill"></i></a>
                 </div>
-                
+
                 <div>
                     <a class="btn btn-sm btn-danger" href="/logout">LOGOUT</a>
                 </div>

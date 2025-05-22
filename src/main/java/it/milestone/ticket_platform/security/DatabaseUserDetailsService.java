@@ -18,7 +18,8 @@ public class DatabaseUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepo;
 
-    public DatabaseUserDetailsService() {}
+    public DatabaseUserDetailsService() {
+    }
 
     public DatabaseUserDetailsService(UserRepository userRepository) {
         this.userRepo = userRepository;
@@ -27,7 +28,7 @@ public class DatabaseUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optUser = userRepo.findByUsername(username);
-        if(optUser.isPresent()) {
+        if (optUser.isPresent()) {
             return new DatabaseUserDetails(optUser.get());
         } else {
             throw new UsernameNotFoundException("Username not found");

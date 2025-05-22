@@ -12,5 +12,5 @@ public class IndexController {
     public String index() {
         return "redirect:/ticket";
     }
-    
+
 }

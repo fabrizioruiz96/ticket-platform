@@ -5,5 +5,5 @@ public enum TicketState {
     DA_FARE,
     IN_CORSO,
     COMPLETATO;
-    
+
 }

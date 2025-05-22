@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired 
+    @Autowired
     private DatabaseUserDetailsService userService;
 
     @Autowired
@@ -32,7 +32,8 @@ public class UserController {
     @GetMapping("/show/{id}")
     public String show(@PathVariable("id") Integer id, Model model) {
 
-        if (ticketService.findByUserAndState(id, TicketState.DA_FARE).isEmpty() && ticketService.findByUserAndState(id, TicketState.IN_CORSO).isEmpty()) {
+        if (ticketService.findByUserAndState(id, TicketState.DA_FARE).isEmpty()
+                && ticketService.findByUserAndState(id, TicketState.IN_CORSO).isEmpty()) {
             model.addAttribute("editState", true);
         } else {
             model.addAttribute("editState", false);
@@ -43,7 +44,7 @@ public class UserController {
 
         return "/user/show";
     }
-    
+
     @PostMapping("/updateState")
     public String updateState(@RequestParam("id") Integer id, UserState state) {
         User user = userService.findById(id);
@@ -65,7 +66,7 @@ public class UserController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("user", formUser);
             return "/user/edit";
         }

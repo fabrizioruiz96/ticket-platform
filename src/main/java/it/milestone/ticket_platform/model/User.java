@@ -19,15 +19,15 @@ public class User {
     @Id
     private Integer id;
 
-    @NotBlank(message="Lo username non può essere vuoto")
+    @NotBlank(message = "Lo username non può essere vuoto")
     private String username;
 
-    @NotBlank(message="L'email non può essere vuota")
-    @Email(message="Inserisci un indirizzo email valido")
+    @NotBlank(message = "L'email non può essere vuota")
+    @Email(message = "Inserisci un indirizzo email valido")
     private String email;
 
-    @NotBlank(message="La password non può essere vuota")
-    @Size(min=8, max=64, message="La password deve contenere tra 8 e 64 caratteri")
+    @NotBlank(message = "La password non può essere vuota")
+    @Size(min = 8, max = 64, message = "La password deve contenere tra 8 e 64 caratteri")
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -36,12 +36,12 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user")
     private List<Ticket> tickets;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user")
     private List<Note> notes;
-        
+
     public List<Note> getNotes() {
         return notes;
     }

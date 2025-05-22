@@ -25,20 +25,20 @@ import jakarta.validation.constraints.Size;
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length=150)
-    @Size(min=10, max=150, message="Il testo deve avere tra i 10 e i 150 caratteri")
-    @NotBlank(message="Il campo non può essere vuoto")
+    @Column(length = 150)
+    @Size(min = 10, max = 150, message = "Il testo deve avere tra i 10 e i 150 caratteri")
+    @NotBlank(message = "Il campo non può essere vuoto")
     private String title;
 
     @CreationTimestamp
     private LocalDate dateOfCreation;
 
-    @Column(length=3000)
-    @Size(min=30, max=3000, message="Il testo deve avere tra i 30 e i 3000 caratteri")
-    @NotBlank(message="Il campo non può essere vuoto")
+    @Column(length = 3000)
+    @Size(min = 30, max = 3000, message = "Il testo deve avere tra i 30 e i 3000 caratteri")
+    @NotBlank(message = "Il campo non può essere vuoto")
     private String body;
 
     @Enumerated(EnumType.STRING)
@@ -46,17 +46,17 @@ public class Ticket {
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name="category_id", nullable=false)
-    @NotNull(message="Seleziona una categoria")
+    @JoinColumn(name = "category_id", nullable = false)
+    @NotNull(message = "Seleziona una categoria")
     private Category category;
 
-    @OneToMany(mappedBy="ticket")
+    @OneToMany(mappedBy = "ticket")
     private List<Note> notes;
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name="user_id", nullable=false)
-    @NotNull(message="Seleziona un'operatore")
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message = "Seleziona un'operatore")
     private User user;
 
     public User getUser() {
@@ -122,5 +122,5 @@ public class Ticket {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
 }

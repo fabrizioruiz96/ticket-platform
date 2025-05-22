@@ -23,7 +23,7 @@ public class NoteController {
     public String store(@Valid @ModelAttribute("note") Note formNote,
             BindingResult bindingResult, Model model) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("editMode", false);
             model.addAttribute("note", formNote);
             return "/note/edit";
@@ -32,5 +32,5 @@ public class NoteController {
         noteService.save(formNote);
         return "redirect:/ticket/show/" + formNote.getTicket().getId();
     }
-    
+
 }

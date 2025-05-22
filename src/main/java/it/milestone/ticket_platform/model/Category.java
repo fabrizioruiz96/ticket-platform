@@ -13,13 +13,13 @@ import jakarta.validation.constraints.NotBlank;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotBlank
     private String name;
 
-    @OneToMany(mappedBy="category")
+    @OneToMany(mappedBy = "category")
     private List<Ticket> tickets;
 
     public List<Ticket> getTickets() {

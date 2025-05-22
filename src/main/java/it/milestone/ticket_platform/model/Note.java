@@ -21,26 +21,26 @@ import jakarta.validation.constraints.Size;
 public class Note {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @CreationTimestamp
     private LocalDate dateOfCreation;
 
-    @Column(length=1500)
-    @Size(min=30, max=1500, message="Il testo deve avere tra i 30 e i 1500 caratteri")
-    @NotBlank(message="Il campo non può essere vuoto")
+    @Column(length = 1500)
+    @Size(min = 30, max = 1500, message = "Il testo deve avere tra i 30 e i 1500 caratteri")
+    @NotBlank(message = "Il campo non può essere vuoto")
     private String body;
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name="ticket_id", nullable=false)
+    @JoinColumn(name = "ticket_id", nullable = false)
     @NotNull
     private Ticket ticket;
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;
 
