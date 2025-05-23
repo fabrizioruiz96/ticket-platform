@@ -48,12 +48,20 @@
                                 <form th:action="@{/ticket/updateState}" method="post" class="gap-1 d-flex">
                                     <input type="hidden" name="id" th:value="${ticket.id}" />
 
-                                    <div class="input-group">
+                                    <div class="input-group" th:if="${editState}">
                                         <select name="state" id="changeState" class="form-select border border-black">
                                             <option th:each="state : ${stateList}" th:text="${state}"
                                                 th:value="${state}" th:selected="${ticket.state == state}"></option>
                                         </select>
                                         <button class="btn btn-primary border border-black" type="submit"><i
+                                                class="bi bi-pencil"></i></button>
+                                    </div>
+                                    <div class="input-group" th:if="${!editState}">
+                                        <select name="state" id="changeState" class="form-select border border-black" disabled>
+                                            <option th:each="state : ${stateList}" th:text="${state}"
+                                                th:value="${state}" th:selected="${ticket.state == state}"></option>
+                                        </select>
+                                        <button class="btn btn-primary border border-black" type="submit" disabled><i
                                                 class="bi bi-pencil"></i></button>
                                     </div>
                                 </form>
@@ -100,6 +108,12 @@
                         <h4>Aggiungi una nota</h4>
                     </label>
                     <textarea th:field="*{body}" id="inputNote" class="form-control"></textarea>
+
+                    <div class="text-start">
+                        <ul th:if="${#fields.hasErrors('body')}">
+                            <li th:each="error : ${#fields.errors('body')}" class="text-danger" th:text="${error}"></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary border border-black">Aggiungi</button>

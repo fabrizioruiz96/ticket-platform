@@ -107,6 +107,14 @@ public class TicketController {
             return "/error_pages/generalError";
         }
 
+        User operator = ticketService.findById(id).get().getUser();
+        UserState state = operator.getState();
+        if(state == UserState.NON_ATTIVO) {
+            model.addAttribute("editState", false);
+        } else {
+            model.addAttribute("editState", true);
+        }
+
         model.addAttribute("newNote", new Note(ticketService.findById(id).get(), userService.findById(user.getId())));
         model.addAttribute("ticket", optTicket.get());
         model.addAttribute("stateList", TicketState.values());

@@ -56,7 +56,7 @@ public class Ticket {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "user_id", nullable = false)
-    @NotNull(message = "Seleziona un'operatore")
+    @NotNull(message = "Seleziona un operatore")
     private User user;
 
     public User getUser() {

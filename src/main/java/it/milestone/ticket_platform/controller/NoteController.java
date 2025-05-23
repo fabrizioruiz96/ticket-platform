@@ -20,13 +20,13 @@ public class NoteController {
     private NoteService noteService;
 
     @PostMapping("/create")
-    public String store(@Valid @ModelAttribute("note") Note formNote,
+    public String store(@Valid @ModelAttribute("newNote") Note formNote,
             BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("editMode", false);
-            model.addAttribute("note", formNote);
-            return "/note/edit";
+            model.addAttribute("newNote", formNote);
+            return "redirect:/ticket/show/" + formNote.getTicket().getId();
         }
 
         noteService.save(formNote);
